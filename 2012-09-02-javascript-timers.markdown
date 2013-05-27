@@ -4,7 +4,6 @@ title: "理解JavaScript定时器：setTimeout和setInterval"
 date: 2012-09-06 22:56
 meta: true
 comments: true
-categories: JavaScript
 tags: [javascript,javascript timer]
 ---
 **定时器其实并不是`JavaScript`提供的，而是由浏览器（对于前端来说）提供的。**所以`setTimeout()`和`setInterval()`这两个方法均是通过浏览器的顶层对象`window`进行调用，可能平时大家在使用的过程中也会省去`window`而直接使用这两个方法。  

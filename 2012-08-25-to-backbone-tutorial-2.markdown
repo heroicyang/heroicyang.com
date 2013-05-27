@@ -4,7 +4,6 @@ title: "Backbone之旅：前端MVC架构初体验（下）"
 date: 2012-08-09 00:59
 meta: true
 comments: true
-categories: JavaScript
 tags: [javascript,backbone,mvc]
 ---
 继[《Backbone之旅：前端MVC架构初体验（上）》](http://heroicyang.com/2012/08/08/to-backbone-tutorial-1)，上篇中最后的代码已经完全达到最初提出的几点要求，现在就结合`Backbone`提供的能力，来继续精简代码。最后的目标就是将上篇中的代码全部重构为`Backbone`的`MVC`模式。  

@@ -4,7 +4,6 @@ title: "深入理解JavaScript定时器（续）"
 date: 2012-10-14 22:50
 meta: true
 comments: true
-categories: JavaScript
 tags: [javascript,javascript timer]
 ---
 对于浏览器端来说，大多数事件都是异步的，但是有部分事件却不是，这部分事件称做**同步事件**，因此它们都是立即执行的，完全不理会前几篇文章中所提到的**事件队列**。以及浏览器的渲染、重绘等操作，也会打乱之前我们好不容易所建立起来的**事件队列**的概念。不过，本篇将会陆续不断的把这些坑给填上。  
@@ -13,30 +12,34 @@ tags: [javascript,javascript timer]
 
 ###DOM改变事件(DOM Mutation events)
 
-下面的Demo便用于说明同步事件之一的`DOM Mutation events`（注：该事件不支持Chrome浏览器）。  
-{% codeblock lang:javascript %}
-<a href="http://heroicyang.com/">heroicyang.com</a>
+下面的Demo便用于说明同步事件之一的`DOM Mutation events`（注：该事件不支持Chrome浏览器）。
+
+{% codeblock lang:html %}
+<a href="http://heroicyang.com/">
+  heroicyang.com
+</a>
 <script type="text/javascript">
   var anchor = document.getElementsByTagName('a')[0];
-
   anchor.onclick = function(e) {
     alert('in onclick');
     this.setAttribute('href', '#');
     alert('out onclick');
     return false;
   };
-
   if (anchor.addEventListener) {  //Firefox, Opera
-    anchor.addEventListener('DOMAttrModified', onpropchange, false);
+    anchor
+      .addEventListener('DOMAttrModified', onpropchange, false);
   } else if (anchor.attachEvent) {  //IE
-    anchor.attachEvent('onpropertychange', onpropchange);
+    anchor
+      .attachEvent('onpropertychange', onpropchange);
   }
-
+  
   function onpropchange() {
     alert('onpropchange');
   }
 </script>
-{% endcodeblock %}  
+{% endcodeblock %}
+
 <!-- more -->
 当`click`事件触发时，其处理的顺序依次为：
 

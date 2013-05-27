@@ -4,7 +4,6 @@ title: "JavaScript中创建类的方式"
 date: 2012-08-19 01:05
 meta: true
 comments: true
-categories: JavaScript
 tags: [javascript,javascript class]
 ---
 现在`JavaScript`这门技术已经到了一个引爆点，一年前我对它的了解都只停留在肤浅的网页客户端脚本语言，只会简单的玩玩`jQuery`和`ExtJs`，其实都算不上开发者，而是一个`JavaScript`用户。但今年的目标是做一个合格的前端攻城湿，所以恶补是必须的。  

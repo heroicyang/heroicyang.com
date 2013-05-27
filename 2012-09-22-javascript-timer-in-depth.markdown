@@ -4,7 +4,6 @@ title: "深入理解JavaScript定时器"
 date: 2012-09-22 18:57
 meta: true
 comments: true
-categories: JavaScript
 tags: [javascript,javascript timer]
 ---
 对于浏览器内部，大部分操作都是异步的生成事件并添加到`JavaScript引擎线程`的队列中，然后由`JavaScript引擎线程`进行调度执行。因此浏览器的很多事件都是和`JavaScript`相结合的，但是也有一些内部的限制。  

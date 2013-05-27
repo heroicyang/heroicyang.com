@@ -4,7 +4,6 @@ title: "JavaScript Event Loop 浅析"
 date: 2012-08-28 22:52
 meta: true
 comments: true
-categories: JavaScript
 tags: [javascript,javascript timer,event-loop]
 ---
 最近在学习`Nodejs`的过程中深入的了解了`异步编程`这个概念，为了更好的使用`Nodejs`，这些概念不可不知。在以前作为一个`JavaScript`用户的时候，完全是不知道它是怎么运行的，对好些概念也是“知其然不知其所以然”。  
@@ -13,28 +12,28 @@ tags: [javascript,javascript timer,event-loop]
 
 ###问题场景
 先来看看一段代码：  
-{% codeblock lang:javascript %}
-  <a href="#" id="doBtn">do something</a>
-  <div id="status"></div>
-  <script type="text/javascript">
-    void function() {
-      var doBtn = document.getElementById('doBtn')
-        , status = document.getElementById('status');
+{% codeblock lang:html %}
+<a href="#" id="doBtn">do something</a>
+<div id="status"></div>
+<script type="text/javascript">
+  void function() {
+    var doBtn = document.getElementById('doBtn')
+      , status = document.getElementById('status');
 
-      doBtn.onclick = function(e) {
-        e.preventDefault();
+    doBtn.onclick = function(e) {
+      e.preventDefault();
 
-        status.innerText = 'doing...please wait...';  //开始啦
-        sleep(10000);  //模拟一个耗时较长的计算过程，10s
-        status.innerText = 'done';  //完成啦
-      };
-    }();
+      status.innerText = 'doing...please wait...';  //开始啦
+      sleep(10000);  //模拟一个耗时较长的计算过程，10s
+      status.innerText = 'done';  //完成啦
+    };
+  }();
 
-    function sleep(ms) {
-      var start = new Date();
-      while (new Date() - start <= ms) {}
-    }
-  </script>
+  function sleep(ms) {
+    var start = new Date();
+    while (new Date() - start <= ms) {}
+  }
+</script>
 {% endcodeblock %}
 
 上面代码主要想完成一个功能：按钮被点击时------>显示一个状态告知用户正在干一些事情------>开始干------>事情干完后状态变更为已完成。  

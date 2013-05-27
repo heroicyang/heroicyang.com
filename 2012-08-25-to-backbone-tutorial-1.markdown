@@ -4,7 +4,6 @@ title: "Backbone之旅：前端MVC架构初体验（上）"
 date: 2012-08-08 00:48
 meta: true
 comments: true
-categories: JavaScript
 tags: [javascript,backbone,mvc]
 ---
 最近一段时间来，才算是真正的开始深入学习`JavaScript`，收获颇丰。也首次领略了前端`MVC`架构的风采，现在前端`MVC`的类库和框架越来越多，在经过初步的评估之后，决定先学习备受推崇的`Backbone`。 
