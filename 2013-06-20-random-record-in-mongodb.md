@@ -21,7 +21,7 @@ tags: [mongodb]
 /* more records... */
 
 /* create index */
-> db.docs.ensureIndex({ username: 1, random: 1 })
+> db.twitter.ensureIndex({ username: 1, random: 1 })
 
 > rand = Math.random()
 > result = db.twitter.findOne({ username: 'heroic', random: { $gte: rand } })
@@ -41,7 +41,7 @@ tags: [mongodb]
 /* more records... */
 
 /* create index */
-> db.docs.ensureIndex({ username: 1, random: '2d' })
+> db.twitter.ensureIndex({ username: 1, random: '2d' })
 
 > result = db.twitter.findOne({ username: 'heroic', random: { $near: [Math.random(), 0] } })
 {% endcodeblock %}

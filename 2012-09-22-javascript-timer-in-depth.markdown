@@ -11,7 +11,7 @@ tags: [javascript,javascript timer]
 首先我们非常确定`JavaScript`是单线程的，对于浏览器来说，一个窗体中只有一个`JavaScript引擎线程`。而其他的行为，如：渲染、下载等是由单独的线程进行管理的，且具有不同的优先级。  
 
 ##异步事件
-前面提到大多数事件都是异步的，触发的时候就将回调函数添加到事件队列。浏览器提供了一个内部的回路，也就是之前所谈到的`Event Loop`，由它来负责检查队列和处理事件、执行函数等。详细可参考我的[前一篇博文](http://heroicyang.com/2012/08/28/javascript-event-loop.html)。而`setTimeout`和`setInterval`也是将其需要执行的函数添加到事件队列。  
+前面提到大多数事件都是异步的，触发的时候就将回调函数添加到事件队列。浏览器提供了一个内部的回路，也就是之前所谈到的`Event Loop`，由它来负责检查队列和处理事件、执行函数等。详细可参考我的[前一篇博文](http://heroicyang.com/2012/08/28/javascript-event-loop)。而`setTimeout`和`setInterval`也是将其需要执行的函数添加到事件队列。  
 
 **事实上，大多数交互和活动都得通过事件循环。**  
 <!-- more -->  

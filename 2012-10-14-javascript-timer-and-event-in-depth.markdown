@@ -77,7 +77,7 @@ tags: [javascript,javascript timer]
 
 ![](http://img.heroicyang.com/synchronous-focus-event.png)  
 
-常规情况下，事件处理都是一个一个执行的，而我们也就假定一个事件开始时，前一个事件是执行完毕了的。而以上这些同步事件不仅打破了我们的常规认识，还会给我们带来一些负面效应。不过我们依旧可以使用[上一篇](http://heroicyang.com/2012/09/22/javascript-timer-in-depth.html)中所使用的`setTimeout(func, 0)`来解决。  
+常规情况下，事件处理都是一个一个执行的，而我们也就假定一个事件开始时，前一个事件是执行完毕了的。而以上这些同步事件不仅打破了我们的常规认识，还会给我们带来一些负面效应。不过我们依旧可以使用[上一篇](http://heroicyang.com/2012/09/22/javascript-timer-in-depth)中所使用的`setTimeout(func, 0)`来解决。  
 
 ##JavaScript执行与页面渲染
 
@@ -156,7 +156,7 @@ tags: [javascript,javascript timer]
 
 ##当脚本需要花很长的时间干复杂的工作时
 
-类似的就是前面那个阻塞我们浏览器的，频繁更改`container`背景颜色的例子。最后，我们还是用[上一篇文章中](http://heroicyang.com/2012/09/22/javascript-timer-in-depth.html)的`setTimeout(func, 0)`来解决它吧。  
+类似的就是前面那个阻塞我们浏览器的，频繁更改`container`背景颜色的例子。最后，我们还是用[上一篇文章中](http://heroicyang.com/2012/09/22/javascript-timer-in-depth)的`setTimeout(func, 0)`来解决它吧。  
 {% codeblock lang:javascript %}
 <div id="container"></div>
 <input type="button" value="run" id="run">

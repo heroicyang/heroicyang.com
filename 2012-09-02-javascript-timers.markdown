@@ -13,7 +13,7 @@ tags: [javascript,javascript timer]
 setTimeout(func|code, delay);
 setInterval(func|code, delay);
 {% endcodeblock %}  
-这两个方法总是被简单的认为：在多少毫秒之后就执行里面的函数或者每间隔多少毫秒就执行里面的函数，基于这种理解的话会遇到很多匪夷所思的坑。而结合[上篇文章](http://heroicyang.com/2012/08/28/javascript-event-loop.html)中所提到的执行队列来解释的话，很多疑问都可以迎刃而解。
+这两个方法总是被简单的认为：在多少毫秒之后就执行里面的函数或者每间隔多少毫秒就执行里面的函数，基于这种理解的话会遇到很多匪夷所思的坑。而结合[上篇文章](http://heroicyang.com/2012/08/28/javascript-event-loop)中所提到的执行队列来解释的话，很多疑问都可以迎刃而解。
   
 前者：在指定的毫秒数后，将定时任务处理函数（`func|code`）添加到执行队列的队尾。  
 
