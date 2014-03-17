@@ -11,11 +11,11 @@ for (var i = 0; i < 10; i++) {
     var foo = 'bar';
 }
 
-function foo() {
+function test() {
   console.log(i); // 10
   console.log(foo); // 'bar'
 }
-foo();
+test();
 ```
 
 从运行结果不难看出，变量`i`在循环体结束之后仍然可以访问。而诸如Java、C#等语言中，循环结束之后便不能再访问到循环体中的变量了。继续看下面代码：
