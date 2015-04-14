@@ -1,0 +1,867 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.2"/>
+
+
+    <meta name="description" content="Pseudo fullstack developer." />
+
+
+
+  <meta name="keywords" content="Heroic Yang, web developer, javascript, Node.js, backbone.js, marionette.js" />
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HeroicYang's Blog" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.2" />
+
+
+
+
+  <title> HeroicYang's Blog </title>
+</head>
+
+<body>
+  <div class="container one-column 
+   page-home 
+">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">HeroicYang's Blog</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+  <div id="posts" class="posts-expand">
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2013/06/20/random-record-in-mongodb/">
+                Mongodb中随机的查询文档记录
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2013-06-20
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2013/06/20/random-record-in-mongodb/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2013/06/20/random-record-in-mongodb/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>在实际应用场景中，几乎都会有随机获取数据记录的需求。而这个需求在Mongodb却不是很好实现，就目前而言，大致上有三种解决方案：</p>
+<ol>
+<li>先计算出一个从<code>0</code>到记录总数之间的随机数，然后采用<code>skip(yourRandomNumber)</code>方法。</li>
+<li>为每一条记录增设<code>random</code>字段，插入数据时赋值为<code>Math.random()</code>，查询时采用<code>$gte</code>和<code>$lte</code>。</li>
+<li>借助Mongodb对地理空间索引（<code>geospatial indexes</code>）的支持，从而可以在第二种方法的基础上来实现随机记录的获取。</li>
+</ol>
+<p>因为Mongodb是不建议使用<code>skip</code>方法的，所以这里就略去第一种方法吧。</p>
+<h3 id="方法二">方法二</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: <span class="built_in">Math</span>.random(), content: <span class="string">'balabala0...'</span> &#125;)</span><br><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: <span class="built_in">Math</span>.random(), content: <span class="string">'balabala1...'</span> &#125;)</span><br><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: <span class="built_in">Math</span>.random(), content: <span class="string">'balabala2...'</span> &#125;)</span><br><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: <span class="built_in">Math</span>.random(), content: <span class="string">'balabala3...'</span> &#125;)</span><br><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: <span class="built_in">Math</span>.random(), content: <span class="string">'balabala4...'</span> &#125;)</span><br><span class="line"><span class="comment">/* more records... */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* create index */</span></span><br><span class="line">&gt; db.twitter.ensureIndex(&#123; username: <span class="number">1</span>, random: <span class="number">1</span> &#125;)</span><br><span class="line"></span><br><span class="line">&gt; rand = <span class="built_in">Math</span>.random()</span><br><span class="line">&gt; result = db.twitter.findOne(&#123; username: <span class="string">'heroic'</span>, random: &#123; $gte: rand &#125; &#125;)</span><br><span class="line">&gt; <span class="keyword">if</span> (result == <span class="literal">null</span>) &#123;</span><br><span class="line">&gt;   result = db.twitter.findOne(&#123; username: <span class="string">'heroic'</span>, random: &#123; $lte: rand &#125; &#125;)</span><br><span class="line">&gt; &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="方法三">方法三</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: [<span class="built_in">Math</span>.random(), <span class="number">0</span>], content: <span class="string">'balabala0...'</span> &#125;)</span><br><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: [<span class="built_in">Math</span>.random(), <span class="number">0</span>], content: <span class="string">'balabala1...'</span> &#125;)</span><br><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: [<span class="built_in">Math</span>.random(), <span class="number">0</span>], content: <span class="string">'balabala2...'</span> &#125;)</span><br><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: [<span class="built_in">Math</span>.random(), <span class="number">0</span>], content: <span class="string">'balabala3...'</span> &#125;)</span><br><span class="line">&gt; db.twitter.save(&#123; username: <span class="string">'heroic'</span>, random: [<span class="built_in">Math</span>.random(), <span class="number">0</span>], content: <span class="string">'balabala4...'</span> &#125;)</span><br><span class="line"><span class="comment">/* more records... */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* create index */</span></span><br><span class="line">&gt; db.twitter.ensureIndex(&#123; username: <span class="number">1</span>, random: <span class="string">'2d'</span> &#125;)</span><br><span class="line"></span><br><span class="line">&gt; result = db.twitter.findOne(&#123; username: <span class="string">'heroic'</span>, random: &#123; $near: [<span class="built_in">Math</span>.random(), <span class="number">0</span>] &#125; &#125;)</span><br></pre></td></tr></table></figure>
+<p>更多关于Mongodb地理空间索引资料，请参见<a href="http://docs.mongodb.org/manual/core/2d/" target="_blank" rel="external">这里</a>。</p>
+<p>目前这几种方案似乎都不是很理想，但是也没有其他办法了，所以广大程序员们就相约到Mongodb的官方jira提了相应的需求，但是目前仍然没有任何的响应。可以参见<a href="https://jira.mongodb.org/browse/SERVER-533" target="_blank" rel="external">这里</a>，围观一下。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mongodb/"> #mongodb </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2013/06/07/javascript-class-inherit-optimized/">
+                关于JavaScript中的继承（三）：再谈类式继承
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2013-06-07
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2013/06/07/javascript-class-inherit-optimized/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2013/06/07/javascript-class-inherit-optimized/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>在<a href="/2013/05/30/learn-javascript-inherit-class/">《关于JavaScript中的继承（一）：类式继承》</a>中已经基本上实现了类式继承，但仍然还存在一些问题，接下来对之前的实现进一步进行完善。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Parent = <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'heroic'</span>;</span><br><span class="line">&#125;;</span><br><span class="line">Parent.prototype.print = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'name: '</span>, <span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> parent = <span class="keyword">new</span> Parent();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Child = <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> </span>&#123;</span><br><span class="line">  Parent.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">&#125;;</span><br><span class="line">Child.prototype = parent;</span><br><span class="line">Child.prototype.setChildAge = <span class="function"><span class="keyword">function</span> <span class="params">(age)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">parent.setChildAge(<span class="number">10</span>);</span><br><span class="line"><span class="built_in">console</span>.log(parent.age);  <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+<p>正如代码所见，在为子对象原型添加自己独有方法的时候，父对象也受到了影响，这可不是期望的结果。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> child = <span class="keyword">new</span> Child(<span class="string">'child'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(child.name);  <span class="comment">// 'child'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> child.name;</span><br><span class="line"><span class="built_in">console</span>.log(child.name);  <span class="comment">// 'heroic'</span></span><br></pre></td></tr></table></figure>
+<p>同样如代码所示，<code>child</code>对象持有了两个<code>name</code>属性，一个是通过构造函数拷贝的，另一个是原型链上的，当删除掉本身的<code>name</code>属性后，便访问到了原型链上的了。对于这个问题，解决方案很简单直接：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ... */</span></span><br><span class="line">Child.prototype = Parent.prototype;  <span class="comment">// 只继承父对象原型链上的属性</span></span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line"><span class="keyword">delete</span> child.name;</span><br><span class="line"><span class="built_in">console</span>.log(child.name);  <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<p>但是这种方法也并没有解决最开始的那个问题，即添加或删除子对象原型上的属性时，会一并反映到父对象中。这个时候就需要用到<a href="/2013/06/02/learn-javascript-inherit-proto/">《关于JavaScript中的继承（二）：原型式继承》</a>中用到的临时构造函数了。  </p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/06/07/javascript-class-inherit-optimized/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/inherit/"> #inherit </a>
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2013/06/02/learn-javascript-inherit-proto/">
+                关于JavaScript中的继承（二）：原型式继承
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2013-06-02
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2013/06/02/learn-javascript-inherit-proto/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2013/06/02/learn-javascript-inherit-proto/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>JavaScript中本没有类，所以凡事也不要强求，强扭的瓜总是不填的嘛。继承也无非就是一个对象拥有另外一个对象的特性，所以完全不需要复杂的去模拟面向对象中的类式继承，而借助JavaScript独特的原型机制就可以实现了。同样，需要创建一个对象时也不再采用模拟<strong>类-对象</strong>的方式，而是直接使用JavaScript的对象字面量就好了。因为对于对象来说我们关系的无非也就是它具备哪些属性、有哪些行为而已。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> parent = &#123;</span><br><span class="line">  printName: <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name || <span class="string">'parent'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child = &#123;&#125;;  <span class="comment">// 暂时这样</span></span><br><span class="line">child.name = <span class="string">'child'</span>;  <span class="comment">// 在很多情况下我们并不希望继承原对象自己的属性，而是在我们需要时，直接添加就好</span></span><br><span class="line">child.printName();  <span class="comment">// 重点的是我们希望child具备打印自己名字的行为</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码目前还不能工作，<a href="http://heroicyang.com/2013/05/30/learn-javascript-inherit-class/">上一篇文章</a>中谈到过JavaScript中对象属性查找机制，如果<code>child</code>对象本身没有<code>printName()</code>这个方法，那我们保证其原型上有这个方法，它就能正常工作了。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* var parent... */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> object = <span class="function"><span class="keyword">function</span> <span class="params">(obj)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;&#125;;</span><br><span class="line">  F.prototype = obj;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> F;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 改变child对象的创建方式，不直接采用字面量了，而是用`object`方法来创建</span></span><br><span class="line"><span class="keyword">var</span> child = object(parent);</span><br><span class="line">child.name = <span class="string">'child'</span>;</span><br><span class="line">child.printName();  <span class="comment">// 'child'</span></span><br></pre></td></tr></table></figure>
+<p>通过一个<code>object()</code>函数，我们就完全可以实现一个对象从另一个对象继承了。其原理很简单，即在<code>object()</code>函数内部创建一个临时的构造函数，然后修改这个构造函数的原型，最后再返回这个构造函数的一个实例。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/06/02/learn-javascript-inherit-proto/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/inherit/"> #inherit </a>
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2013/05/30/learn-javascript-inherit-class/">
+                关于JavaScript中的继承（一）：类式继承
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2013-05-30
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2013/05/30/learn-javascript-inherit-class/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2013/05/30/learn-javascript-inherit-class/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>“继承”是面向对象中的一个概念，说开去无非就是代码重用的一种方式罢了。  </p>
+<p>虽然JavaScript并不是一门真正的面向对象语言，甚至连类的概念都没有。但得益于构造器的存在，在JavaScript中是可以完全模拟出 <strong>类-对象</strong> 行为的。如：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person();</span><br></pre></td></tr></table></figure>
+<p>看上去除了变量声明时不是强类型之外，完全与面向对象如出一辙。所以谈及继承时，大家首推的也是一种叫“类式继承”的手法了。  </p>
+<h3 id="类式继承之基于原型链">类式继承之基于原型链</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Parent = <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'heroic'</span>;</span><br><span class="line">&#125;;</span><br><span class="line">Parent.prototype.printName = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> Child = <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">inherit(Child, Parent);</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line">Child.inherit(Parent);</span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/05/30/learn-javascript-inherit-class/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/inherit/"> #inherit </a>
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2013/05/22/hexo-theme-modernist/">
+                折腾了个新主题
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2013-05-22
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2013/05/22/hexo-theme-modernist/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2013/05/22/hexo-theme-modernist/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+        <div class="post-gallery">
+          
+            <a class="post-gallery-img fancybox" href="http://img.heroicyang.com/hexo-theme-modernist-index.png" rel="gallery_ci8gzu1sn000x7vtf4gfvv82y">
+              <img src="http://img.heroicyang.com/hexo-theme-modernist-index.png" />
+            </a>
+          
+        </div>
+      
+
+      
+        
+          <p>前几天偶然发现了一个Github Page主题：<a href="http://orderedlist.github.io/modernist/" target="_blank" rel="external">Modernist</a>，觉着很舒服。作者将其开源在Github上的，所以我就fork下来自己折腾了个<a href="https://github.com/tommy351/hexo" target="_blank" rel="external">Hexo</a>的主题。  </p>
+<p>根据<a href="https://github.com/tommy351/hexo-theme-light" target="_blank" rel="external">light</a>主题的结构修改而来，但是去掉了侧边栏，改成一栏，所以随之也就没有了light主题的那些widget了。不过我增加了国内的<a href="http://duoshuo.com/" target="_blank" rel="external">多说评论框</a>的配置，以及更好的响应式支持。  </p>
+<p>主题已经放到<a href="https://github.com/heroicyang/hexo-theme-modernist" target="_blank" rel="external">Github</a>上了，也已完全适用于最新版的Hexo。<span class="text-lt">为了更好的使用这个主题，建议clone我fork的<a href="https://github.com/heroicyang/hexo" target="_blank" rel="external">hexo</a>项目到本地，使用<code>/path/to/hexo/bin/hexo</code>来代替之前安装的全局<code>hexo</code>命令，方法见下面。我主要修改了代码块高亮（highlight）生成，以及修复了始终会生成Read more链接的BUG，不过我会尽快发起pull request到hexo的。</span>  </p>
+<p>另外，如果需要使用多说评论框，可以使用我的自定义多说评论框样式，主要保持了和Modernist theme的样式统一。请猛戳<a href="https://gist.github.com/heroicyang/5644407" target="_blank" rel="external">这里</a>。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/"> #hexo </a>
+          
+            <a href="/tags/modernist/"> #modernist </a>
+          
+            <a href="/tags/theme/"> #theme </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+  </div>
+
+  
+  <div class="pagination">
+    <a class="extend prev" rel="prev" href="/">&laquo;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">&raquo;</a>
+  </div>
+
+
+        </div>
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://tp1.sinaimg.cn/1707895864/180/40054752986/1" alt="Heroic Yang" />
+          <p class="site-author-name">Heroic Yang</p>
+        </div>
+        <p class="site-description motion-element">Pseudo fullstack developer.</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml">
+              <i class="menu-item-icon icon-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="heroicyang" target="_blank">GitHub</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="heroicyang" target="_blank">Twitter</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="heroicyang" target="_blank">Weibo</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+      </div>
+
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp;  2009 - 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Heroic Yang</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.content img').each(function () {
+        var $image = $(this);
+        var $imageWrapLink = $image.parent('a');
+
+        if ($imageWrapLink.size() < 1) {
+          $imageWrapLink = $image.wrap('<a href="' + this.getAttribute('src') + '"></a>').parent('a');
+        }
+        $imageWrapLink.addClass('fancybox');
+      });
+    });
+    $('.fancybox').fancybox({
+      helpers: {
+        overlay: {
+          locked: false
+        }
+      }
+    });
+  </script>
+
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    LogoAndMenuMotion();
+    sidebatToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+    function LogoAndMenuMotion() {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        
+        { e: $('.logo-line-before i'), p: { translateX: "100%" }, o: { duration: 500, sequenceQueue: false } },
+        { e: $('.logo-line-after i'), p: { translateX: "-100%" }, o: { duration: 500, sequenceQueue: false } },
+        
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    }
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebatToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"heroicyang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+</body>
+</html>
