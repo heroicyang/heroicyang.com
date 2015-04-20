@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="event-loop,javascript,javascript timer," />
+  <meta name="keywords" content="mac,sublime text," />
 
 
 
@@ -33,7 +33,7 @@
 
 
 
-  <title> JavaScript Event Loop 浅析 // HeroicYang's Blog </title>
+  <title> 前端开发者的 Mac 配置手册（二） // HeroicYang's Blog </title>
 </head>
 
 <body>
@@ -104,7 +104,7 @@
           
           
             
-              JavaScript Event Loop 浅析
+              前端开发者的 Mac 配置手册（二）
             
           
         </h1>
@@ -112,7 +112,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2012-08-28
+          发表于 2015-04-21
         </span>
 
         
@@ -121,8 +121,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2012/08/28/javascript-event-loop/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2012/08/28/javascript-event-loop/"></span>
+            <a href="/2015/04/21/fe-dev-setup-2/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/21/fe-dev-setup-2/"></span>
             </a>
           </span>
           
@@ -136,29 +136,43 @@
       
 
       
-        <p>最近在学习<code>Nodejs</code>的过程中深入的了解了<code>异步编程</code>这个概念，为了更好的使用<code>Nodejs</code>，这些概念不可不知。在以前作为一个<code>JavaScript</code>用户的时候，完全是不知道它是怎么运行的，对好些概念也是“知其然不知其所以然”。  </p>
-<p>对于客户端的<code>JavaScript</code>和<code>Nodejs</code>来说其实差距不是很大，这回就从客户端方面来说说<code>Event Loop</code>这个概念吧，算是<code>异步编程</code>的一个切入点吧。其实<code>jQuery</code>的作者John Resig在几年前就写了一篇好文章<a href="http://ejohn.org/blog/how-javascript-timers-work/" target="_blank" rel="external">How JavaScript Timers Work</a>，来讲述<code>timer</code>和<code>事件</code>在浏览器中是怎样工作的，我也是通过这篇文章才“知其所以然”。  </p>
-<h3 id="问题场景">问题场景</h3><p>先来看看一段代码：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">id</span>=<span class="value">"doBtn"</span>&gt;</span>do something<span class="tag">&lt;/<span class="title">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"status"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><br><span class="line">  <span class="keyword">void</span> <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> doBtn = <span class="built_in">document</span>.getElementById(<span class="string">'doBtn'</span>)</span><br><span class="line">      , status = <span class="built_in">document</span>.getElementById(<span class="string">'status'</span>);</span><br><span class="line"></span><br><span class="line">    doBtn.onclick = <span class="function"><span class="keyword">function</span><span class="params">(e)</span> </span>&#123;</span><br><span class="line">      e.preventDefault();</span><br><span class="line"></span><br><span class="line">      status.innerText = <span class="string">'doing...please wait...'</span>;  <span class="comment">//开始啦</span></span><br><span class="line">      sleep(<span class="number">10000</span>);  <span class="comment">//模拟一个耗时较长的计算过程，10s</span></span><br><span class="line">      status.innerText = <span class="string">'done'</span>;  <span class="comment">//完成啦</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">sleep</span><span class="params">(ms)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> start = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">new</span> <span class="built_in">Date</span>() - start &lt;= ms) &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>上面代码主要想完成一个功能：按钮被点击时———&gt;显示一个状态告知用户正在干一些事情———&gt;开始干———&gt;事情干完后状态变更为已完成。<br><a id="more"></a></p>
-<p>看上去没问题，应该是可以工作的，于是在浏览器运行这个页面。可是现实总是残忍的，没有符合预期效果。当点击按钮之后，浏览器就冻结了，用于显示状态的<code>div</code>并没有显示，界面上也没有“doing…”这个提示；经过<code>10s</code>之后，浏览器回过神了，代表耗时较长的计算已经结束，此时用于显示状态的<code>div</code>显示“done”。  </p>
-<p>究其原因：JavaScript引擎是单线程的。而此时还有必要再了解下浏览器内核都有哪些主要的常驻线程，才能解上面的疑惑。浏览器内核常驻线程大致包含以下：  </p>
-<ol>
-<li>浏览器GUI渲染线程</li>
-<li>JavaScript引擎线程</li>
-<li>浏览器定时触发器线程</li>
-<li>浏览器事件触发线程</li>
-<li>浏览器http异步请求线程</li>
-</ol>
-<p>而GUI渲染线程和JavaScript引擎线程是互斥的，JavaScript执行时GUI渲染线程是挂起的，页面将停止一切的解析和渲染行为。上面的3、4、5类线程也会产生不同的异步事件。看下面这张图就应该比较直观了。</p>
-<p><img src="http://img.heroicyang.com/js-event-loop.png" alt="JavaScript-Event-Loop"></p>
-<p>因为JavaScript引擎是单线程的，所以代码都是先压到队列，然后由引擎采用先进先出的方式运行。事件处理函数、timer执行函数也会排到这个队列中，然后利用一个无穷回圈，不断从队头取出函数执行，这个就是<code>Event Loop</code>。  </p>
-<p>接下来还是继续用图来说明上面的代码为什么没有达到预期效果。</p>
-<p><img src="http://img.heroicyang.com/js-event-loop-1.png" alt=""></p>
-<p>于是结果就只看到了”done”。  </p>
-<h3 id="怎样解决？">怎样解决？</h3><p>使用<code>setTimeout()</code>，下面是修改后的<code>onclick</code>事件处理函数：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">doBtn.onclick = <span class="function"><span class="keyword">function</span><span class="params">(e)</span> </span>&#123;</span><br><span class="line">  e.preventDefault();</span><br><span class="line"></span><br><span class="line">  status.innerText = <span class="string">'doing...please wait...'</span>;  <span class="comment">//开始啦</span></span><br><span class="line">  </span><br><span class="line">  setTimeout(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    sleep(<span class="number">10000</span>);  <span class="comment">//模拟一个耗时较长的计算过程，10s</span></span><br><span class="line">    status.innerText = <span class="string">'done'</span>;  <span class="comment">//完成啦</span></span><br><span class="line">  &#125;, <span class="number">0</span>);  <span class="comment">// 0ms delay</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>为什么这样就解决了呢？还是用上面的队列的图来解释。</p>
-<p><img src="http://img.heroicyang.com/js-event-loop-2.png" alt=""></p>
+        <h3 id="写在开始">写在开始</h3><p><a href="http://heroicyang.com/2015/04/20/fe-dev-setup-1/" target="_blank" rel="external">上篇文章</a>介绍的是系统环境的配置，在这一篇中将会介绍代码编辑器 Sublime Text 3 的简单配置和实用插件。</p>
+<p>Sublime Text 是一款跨平台代码编辑器（Not IDE），拥有非常丰富成熟的插件，辅以大量的快捷键，足使开发效率成倍提升。</p>
+<p>另外，GitHub 在去年开源了一款叫 <a href="https://atom.io/" target="_blank" rel="external">Atom</a> 的代码编辑器，基本和 Sublime Text 无异。不过是基于 Node.js 和 Chromium，这个会在下一篇进行介绍。Atom 也是我目前的主力编辑器。</p>
+<a id="more"></a>
+<h3 id="安装">安装</h3><p>目前最新版本为 Sublime Text 3，在<a href="http://www.sublimetext.com/3" target="_blank" rel="external">官方网站</a>提供了各个平台的下载。推荐使用此版本，有部分插件只支持 Sublime Text 3。</p>
+<h4 id="Package_Control">Package Control</h4><p>安装好 Sublime 之后，通过安装 <a href="https://packagecontrol.io/" target="_blank" rel="external">Package Control</a> 来管理其大量的插件。</p>
+<ul>
+<li>打开 Sublime Text 然后按 <code>ctrl + `</code> 打开控制台</li>
+<li>粘贴下面的代码到控制台，然后回车</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.request,os,hashlib; h = <span class="string">'eb2297e1a458f27d836c04bb0cbaf282'</span> + <span class="string">'d0e7a3098092775ccb37ca9d6b2e4b7d'</span>; pf = <span class="string">'Package Control.sublime-package'</span>; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( <span class="string">'http://packagecontrol.io/'</span> + pf.replace(<span class="string">' '</span>, <span class="string">'%20'</span>)).read(); dh = hashlib.sha256(by).hexdigest(); print(<span class="string">'Error validating download (got %s instead of %s), please try manual install'</span> % (dh, h)) <span class="keyword">if</span> dh != h <span class="keyword">else</span> open(os.path.join( ipp, pf), <span class="string">'wb'</span> ).write(by)</span><br></pre></td></tr></table></figure>
+<p>待 Package Control 安装完成之后，用 <code>cmd + shift + p</code> 打开命令面板输入 <code>PC</code> 即可看到和 Package Control 相关的选项。紧接着就可以安装（管理）各种插件了。</p>
+<h3 id="配置">配置</h3><p>Sublime Text 并不提供专门的配置界面，而是通过 JSON 文件来放置各种配置信息。而每种配置信息都分为 <code>Default</code> 和 <code>User</code> 两个版本，即 <code>Default</code> 为默认配置，因此不建议直接修改 <code>Default</code> 配置文件，而是在 <code>User</code> 文件中放置自己的个性化配置。</p>
+<p>比如我的部分配置：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">font_size</span>": <span class="value"><span class="number">14</span></span>,</span><br><span class="line">  "<span class="attribute">font_face</span>": <span class="value"><span class="string">"Monaco"</span></span>,</span><br><span class="line">  "<span class="attribute">theme</span>": <span class="value"><span class="string">"Spacegray.sublime-theme"</span></span>,</span><br><span class="line">  "<span class="attribute">color_scheme</span>": <span class="value"><span class="string">"Packages/User/SublimeLinter/base16-ocean.dark (SL).tmTheme"</span></span>,</span><br><span class="line">  "<span class="attribute">tab_size</span>": <span class="value"><span class="number">2</span></span>,</span><br><span class="line">  "<span class="attribute">translate_tabs_to_spaces</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">  "<span class="attribute">trim_automatic_white_space</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">  "<span class="attribute">trim_trailing_white_space_on_save</span>": <span class="value"><span class="literal">true</span></span>,</span><br><span class="line">  "<span class="attribute">ensure_newline_at_eof_on_save</span>": <span class="value"><span class="literal">true</span></span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="插件推荐">插件推荐</h3><ul>
+<li><a href="https://packagecontrol.io/packages/SideBarEnhancements" target="_blank" rel="external">SideBarEnhancements</a> : 侧边栏增强工具（仅支持 Sublime Text 3）</li>
+<li><a href="https://packagecontrol.io/packages/BracketHighlighter" target="_blank" rel="external">BracketHighlighter</a>: 高亮显示匹配括号及当前光标所在区域</li>
+<li><a href="https://packagecontrol.io/packages/TrailingSpaces" target="_blank" rel="external">Trailing​Spaces</a>: 高亮空格并在保存时删除</li>
+<li><a href="https://packagecontrol.io/packages/GitGutter" target="_blank" rel="external">Git​Gutter</a>: 在代码行的前面显示 Git 的改动和差异</li>
+<li><a href="https://packagecontrol.io/packages/Alignment" target="_blank" rel="external">Alignment</a>: 用于对齐代码的赋值语句</li>
+<li><a href="https://packagecontrol.io/packages/DocBlockr" target="_blank" rel="external">DocBlockr</a>: 生成块注释</li>
+<li><a href="https://packagecontrol.io/packages/Emmet" target="_blank" rel="external">Emmet</a>: 更快更高效地编写 HTML/CSS</li>
+<li><a href="https://packagecontrol.io/packages/Tag" target="_blank" rel="external">Tag</a>: 编写 HTML/XML 时自动关闭打开的标签</li>
+<li><a href="https://packagecontrol.io/packages/HTML5" target="_blank" rel="external">HTML5</a>: HTML5 语法增强</li>
+<li><a href="https://packagecontrol.io/packages/JsFormat" target="_blank" rel="external">JsFormat</a>: JavaScript 代码格式化</li>
+<li><a href="https://packagecontrol.io/packages/SublimeLinter" target="_blank" rel="external">SublimeLinter</a>: 语法检测工具</li>
+<li><a href="https://packagecontrol.io/packages/SublimeLinter-jscs" target="_blank" rel="external">Sublime​Linter-jscs</a>: 按照 <a href="https://github.com/mdevils/node-jscs" target="_blank" rel="external">jscs</a> 规则对 JavaScript 语法进行检测，需要先安装 jscs 包 <code>sudo npm i -g jscs</code></li>
+<li><a href="https://packagecontrol.io/packages/SublimeLinter-jshint" target="_blank" rel="external">Sublime​Linter-jshint</a>: 按照 <a href="http://www.jshint.com/docs/" target="_blank" rel="external">jshint</a> 规则对 JavaScript 语法进行检测，需要先安装 jshint 包 <code>sudo npm i -g jshint</code></li>
+<li><a href="https://packagecontrol.io/packages/SublimeLinter-csslint" target="_blank" rel="external">SublimeLinter-csslint</a> CSS 语法检测工具，需要先安装  csslint 包 <code>sudo npm i -g csslint</code></li>
+<li><a href="https://packagecontrol.io/packages/SublimeLinter-jsxhint" target="_blank" rel="external">Sublime​Linter-jsxhint</a> (optional): 对 JSX(React.js) 语法进行检测，需要先安装 jsxhint 包 <code>sudo npm i -g jsxhint</code></li>
+<li><a href="https://packagecontrol.io/packages/Handlebars" target="_blank" rel="external">Handlebars</a> (optional): Handlebars.js 模板引擎语法增强</li>
+<li><a href="https://packagecontrol.io/packages/Stylus" target="_blank" rel="external">Stylus</a> (optional): CSS 预处理器 Stylus 语法增强</li>
+<li><a href="https://packagecontrol.io/packages/GoSublime" target="_blank" rel="external">Go​Sublime</a> (optional): Golang 增强</li>
+</ul>
+<h3 id="参考资料">参考资料</h3><ul>
+<li><a href="http://zh.lucida.me/blog/sublime-text-complete-guide/" target="_blank" rel="external">Sublime Text 全程指南</a>（推荐阅读）</li>
+</ul>
 
       
     </div>
@@ -167,11 +181,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/event-loop/"> #event-loop </a>
+            <a href="/tags/mac/"> #mac </a>
           
-            <a href="/tags/javascript/"> #javascript </a>
-          
-            <a href="/tags/javascript-timer/"> #javascript timer </a>
+            <a href="/tags/sublime-text/"> #sublime text </a>
           
         </div>
       
@@ -180,13 +192,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2012/09/06/javascript-timers/">理解JavaScript定时器：setTimeout和setInterval</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2012/08/26/blogging-like-a-hacker/">像黑客一样写博客</a>
+              <a href="/2015/04/20/fe-dev-setup-1/">前端开发者的 Mac 配置手册（一）</a>
             
           </div>
         </div>
@@ -202,8 +212,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2012/08/28/javascript-event-loop/"
-               data-title="JavaScript Event Loop 浅析" data-url="http://heroicyang.com/2012/08/28/javascript-event-loop/">
+          <div class="ds-thread" data-thread-key="2015/04/21/fe-dev-setup-2/"
+               data-title="前端开发者的 Mac 配置手册（二）" data-url="http://heroicyang.com/2015/04/21/fe-dev-setup-2/">
           </div>
         
       </div>
@@ -312,7 +322,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题场景"><span class="nav-number">1.</span> <span class="nav-text">问题场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#怎样解决？"><span class="nav-number">2.</span> <span class="nav-text">怎样解决？</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在开始"><span class="nav-number">1.</span> <span class="nav-text">写在开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Package_Control"><span class="nav-number">2.1.</span> <span class="nav-text">Package Control</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插件推荐"><span class="nav-number">4.</span> <span class="nav-text">插件推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

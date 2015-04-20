@@ -106,6 +106,86 @@
           
           
             
+              <a class="post-title-link" href="/2015/04/21/fe-dev-setup-2/">
+                前端开发者的 Mac 配置手册（二）
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-04-21
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/04/21/fe-dev-setup-2/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/21/fe-dev-setup-2/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h3 id="写在开始">写在开始</h3><p><a href="http://heroicyang.com/2015/04/20/fe-dev-setup-1/">上篇文章</a>介绍的是系统环境的配置，在这一篇中将会介绍代码编辑器 Sublime Text 3 的简单配置和实用插件。</p>
+<p>Sublime Text 是一款跨平台代码编辑器（Not IDE），拥有非常丰富成熟的插件，辅以大量的快捷键，足使开发效率成倍提升。</p>
+<p>另外，GitHub 在去年开源了一款叫 <a href="https://atom.io/">Atom</a> 的代码编辑器，基本和 Sublime Text 无异。不过是基于 Node.js 和 Chromium，这个会在下一篇进行介绍。Atom 也是我目前的主力编辑器。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/04/21/fe-dev-setup-2/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mac/"> #mac </a>
+          
+            <a href="/tags/sublime-text/"> #sublime text </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2015/04/20/fe-dev-setup-1/">
                 前端开发者的 Mac 配置手册（一）
               </a>
@@ -429,93 +509,11 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2013/07/14/javascript-variable-scope/">
-                JavaScript变量作用域
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2013-07-14
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2013/07/14/javascript-variable-scope/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2013/07/14/javascript-variable-scope/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>所谓作用域，也就是变量和函数起作用的区域，不同的语言有着不同的实现。而在JavaScript中，这也是往往让人迷糊的地方，也是JavaScript中必须理解的特性之一。  </p>
-<p>首先来看看下面的代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> foo = <span class="string">'bar'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(i); <span class="comment">// 10</span></span><br><span class="line">  <span class="built_in">console</span>.log(foo); <span class="comment">// 'bar'</span></span><br><span class="line">&#125;</span><br><span class="line">test();</span><br></pre></td></tr></table></figure>
-<p>从运行结果不难看出，变量<code>i</code>在循环体结束之后仍然可以访问。而诸如Java、C#等语言中，循环结束之后便不能再访问到循环体中的变量了。继续看下面代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'heroic'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> name = <span class="string">'foo'</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(name); <span class="comment">// 'foo'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo();</span><br><span class="line"><span class="built_in">console</span>.log(name); <span class="comment">// 'heroic'</span></span><br></pre></td></tr></table></figure>
-<p><strong>结合两段代码可以知道，在JavaScript中是不存在块级作用域的，只存在函数作用域（也称“本地作用域”）和全局作用域。</strong>而作用域中的变量我们分别称其为：局部变量和全局变量。  </p>
-<p>前辈们（前端的长辈们，嚯嚯）常常反复在说，全局变量是魔鬼啊，魔鬼啊。。。（回声）那到底是嘛原因呢？咱接着往下说。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013/07/14/javascript-variable-scope/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/javascript/"> #javascript </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">&raquo;</a>
   </div>
 
 
@@ -546,7 +544,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -560,7 +558,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

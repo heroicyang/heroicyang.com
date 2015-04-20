@@ -106,6 +106,88 @@
           
           
             
+              <a class="post-title-link" href="/2013/05/30/learn-javascript-inherit-class/">
+                关于JavaScript中的继承（一）：类式继承
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2013-05-30
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2013/05/30/learn-javascript-inherit-class/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2013/05/30/learn-javascript-inherit-class/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>“继承”是面向对象中的一个概念，说开去无非就是代码重用的一种方式罢了。  </p>
+<p>虽然JavaScript并不是一门真正的面向对象语言，甚至连类的概念都没有。但得益于构造器的存在，在JavaScript中是可以完全模拟出 <strong>类-对象</strong> 行为的。如：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person();</span><br></pre></td></tr></table></figure>
+<p>看上去除了变量声明时不是强类型之外，完全与面向对象如出一辙。所以谈及继承时，大家首推的也是一种叫“类式继承”的手法了。  </p>
+<h3 id="类式继承之基于原型链">类式继承之基于原型链</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Parent = <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'heroic'</span>;</span><br><span class="line">&#125;;</span><br><span class="line">Parent.prototype.printName = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> Child = <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">inherit(Child, Parent);</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line">Child.inherit(Parent);</span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/05/30/learn-javascript-inherit-class/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/inherit/"> #inherit </a>
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2013/05/22/hexo-theme-modernist/">
                 折腾了个新主题
               </a>
@@ -140,7 +222,7 @@
       
         <div class="post-gallery">
           
-            <a class="post-gallery-img fancybox" href="http://img.heroicyang.com/hexo-theme-modernist-index.png" rel="gallery_ci8plbwb00010x2tf053x1faf">
+            <a class="post-gallery-img fancybox" href="http://img.heroicyang.com/hexo-theme-modernist-index.png" rel="gallery_ci8pvt3p70014c4tfz71eylng">
               <img src="http://img.heroicyang.com/hexo-theme-modernist-index.png" />
             </a>
           
@@ -425,92 +507,11 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2012/09/06/javascript-timers/">
-                理解JavaScript定时器：setTimeout和setInterval
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2012-09-06
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2012/09/06/javascript-timers/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2012/09/06/javascript-timers/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p><strong>定时器其实并不是<code>JavaScript</code>提供的，而是由浏览器（对于前端来说）提供的。</strong>所以<code>setTimeout()</code>和<code>setInterval()</code>这两个方法均是通过浏览器的顶层对象<code>window</code>进行调用，可能平时大家在使用的过程中也会省去<code>window</code>而直接使用这两个方法。  </p>
-<p>这两个方法所接收的参数都一样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(func|code, delay);</span><br><span class="line">setInterval(func|code, delay);</span><br></pre></td></tr></table></figure><br>这两个方法总是被简单的认为：在多少毫秒之后就执行里面的函数或者每间隔多少毫秒就执行里面的函数，基于这种理解的话会遇到很多匪夷所思的坑。而结合<a href="http://heroicyang.com/2012/08/28/javascript-event-loop">上篇文章</a>中所提到的执行队列来解释的话，很多疑问都可以迎刃而解。</p>
-<p>前者：在指定的毫秒数后，将定时任务处理函数（<code>func|code</code>）添加到执行队列的队尾。  </p>
-<p>后者：按照指定的周期（以毫秒计），将定时任务处理函数（<code>func|code</code>）添加到执行队列的队尾。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2012/09/06/javascript-timers/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/javascript/"> #javascript </a>
-          
-            <a href="/tags/javascript-timer/"> #javascript timer </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/">&laquo;</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">&raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo;</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">&raquo;</a>
   </div>
 
 
@@ -541,7 +542,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -555,7 +556,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

@@ -106,6 +106,87 @@
           
           
             
+              <a class="post-title-link" href="/2012/09/06/javascript-timers/">
+                理解JavaScript定时器：setTimeout和setInterval
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2012-09-06
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2012/09/06/javascript-timers/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2012/09/06/javascript-timers/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p><strong>定时器其实并不是<code>JavaScript</code>提供的，而是由浏览器（对于前端来说）提供的。</strong>所以<code>setTimeout()</code>和<code>setInterval()</code>这两个方法均是通过浏览器的顶层对象<code>window</code>进行调用，可能平时大家在使用的过程中也会省去<code>window</code>而直接使用这两个方法。  </p>
+<p>这两个方法所接收的参数都一样：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(func|code, delay);</span><br><span class="line">setInterval(func|code, delay);</span><br></pre></td></tr></table></figure><br>这两个方法总是被简单的认为：在多少毫秒之后就执行里面的函数或者每间隔多少毫秒就执行里面的函数，基于这种理解的话会遇到很多匪夷所思的坑。而结合<a href="http://heroicyang.com/2012/08/28/javascript-event-loop">上篇文章</a>中所提到的执行队列来解释的话，很多疑问都可以迎刃而解。</p>
+<p>前者：在指定的毫秒数后，将定时任务处理函数（<code>func|code</code>）添加到执行队列的队尾。  </p>
+<p>后者：按照指定的周期（以毫秒计），将定时任务处理函数（<code>func|code</code>）添加到执行队列的队尾。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2012/09/06/javascript-timers/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+            <a href="/tags/javascript-timer/"> #javascript timer </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2012/08/28/javascript-event-loop/">
                 JavaScript Event Loop 浅析
               </a>
@@ -416,93 +497,11 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2012/08/08/to-backbone-tutorial-1/">
-                Backbone之旅：前端MVC架构初体验（上）
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2012-08-07
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2012/08/08/to-backbone-tutorial-1/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2012/08/08/to-backbone-tutorial-1/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>最近一段时间来，才算是真正的开始深入学习<code>JavaScript</code>，收获颇丰。也首次领略了前端<code>MVC</code>架构的风采，现在前端<code>MVC</code>的类库和框架越来越多，在经过初步的评估之后，决定先学习备受推崇的<code>Backbone</code>。 </p>
-<p>以前自己做的一些<code>Web</code>应用，基本上都是按照非常传统的方式：1.服务器端渲染模板；2.利用<code>jQuery</code>的<code>ajax</code>进行异步数据交换。所以首次接触前端架构类的东西，难免有点无从下手。经过几天的奋战，以及参阅国外大牛们的各种<code>Tutorial</code>之后，终于拨开迷雾，缕了些头绪，自己也试着从传统的方式过渡（重构）出了所谓的架构性的代码。  </p>
-<p>整个重构的过程让我受益良多，所以决定再认真的记录一遍，加深自己的印象，也再确认一遍自己是否真的搞明白了，文章应该会比较长。  </p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2012/08/08/to-backbone-tutorial-1/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/backbone/"> #backbone </a>
-          
-            <a href="/tags/javascript/"> #javascript </a>
-          
-            <a href="/tags/mvc/"> #mvc </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
   <div class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">&raquo;</a>
   </div>
 
 
@@ -533,7 +532,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -547,7 +546,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
