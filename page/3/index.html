@@ -106,6 +106,93 @@
           
           
             
+              <a class="post-title-link" href="/2013/05/22/hexo-theme-modernist/">
+                折腾了个新主题
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2013-05-22
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2013/05/22/hexo-theme-modernist/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2013/05/22/hexo-theme-modernist/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+        <div class="post-gallery">
+          
+            <a class="post-gallery-img fancybox" href="http://img.heroicyang.com/hexo-theme-modernist-index.png" rel="gallery_ci8plbwb00010x2tf053x1faf">
+              <img src="http://img.heroicyang.com/hexo-theme-modernist-index.png" />
+            </a>
+          
+        </div>
+      
+
+      
+        
+          <p>前几天偶然发现了一个Github Page主题：<a href="http://orderedlist.github.io/modernist/" target="_blank" rel="external">Modernist</a>，觉着很舒服。作者将其开源在Github上的，所以我就fork下来自己折腾了个<a href="https://github.com/tommy351/hexo" target="_blank" rel="external">Hexo</a>的主题。  </p>
+<p>根据<a href="https://github.com/tommy351/hexo-theme-light" target="_blank" rel="external">light</a>主题的结构修改而来，但是去掉了侧边栏，改成一栏，所以随之也就没有了light主题的那些widget了。不过我增加了国内的<a href="http://duoshuo.com/" target="_blank" rel="external">多说评论框</a>的配置，以及更好的响应式支持。  </p>
+<p>主题已经放到<a href="https://github.com/heroicyang/hexo-theme-modernist" target="_blank" rel="external">Github</a>上了，也已完全适用于最新版的Hexo。<span class="text-lt">为了更好的使用这个主题，建议clone我fork的<a href="https://github.com/heroicyang/hexo" target="_blank" rel="external">hexo</a>项目到本地，使用<code>/path/to/hexo/bin/hexo</code>来代替之前安装的全局<code>hexo</code>命令，方法见下面。我主要修改了代码块高亮（highlight）生成，以及修复了始终会生成Read more链接的BUG，不过我会尽快发起pull request到hexo的。</span>  </p>
+<p>另外，如果需要使用多说评论框，可以使用我的自定义多说评论框样式，主要保持了和Modernist theme的样式统一。请猛戳<a href="https://gist.github.com/heroicyang/5644407" target="_blank" rel="external">这里</a>。</p>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/"> #hexo </a>
+          
+            <a href="/tags/modernist/"> #modernist </a>
+          
+            <a href="/tags/theme/"> #theme </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2013/03/26/javascript-design-pattern-notes/">
                 《JavaScript设计模式》阅读笔记
               </a>
@@ -419,89 +506,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2012/08/28/javascript-event-loop/">
-                JavaScript Event Loop 浅析
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2012-08-28
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2012/08/28/javascript-event-loop/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2012/08/28/javascript-event-loop/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>最近在学习<code>Nodejs</code>的过程中深入的了解了<code>异步编程</code>这个概念，为了更好的使用<code>Nodejs</code>，这些概念不可不知。在以前作为一个<code>JavaScript</code>用户的时候，完全是不知道它是怎么运行的，对好些概念也是“知其然不知其所以然”。  </p>
-<p>对于客户端的<code>JavaScript</code>和<code>Nodejs</code>来说其实差距不是很大，这回就从客户端方面来说说<code>Event Loop</code>这个概念吧，算是<code>异步编程</code>的一个切入点吧。其实<code>jQuery</code>的作者John Resig在几年前就写了一篇好文章<a href="http://ejohn.org/blog/how-javascript-timers-work/">How JavaScript Timers Work</a>，来讲述<code>timer</code>和<code>事件</code>在浏览器中是怎样工作的，我也是通过这篇文章才“知其所以然”。  </p>
-<h3 id="问题场景">问题场景</h3><p>先来看看一段代码：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">id</span>=<span class="value">"doBtn"</span>&gt;</span>do something<span class="tag">&lt;/<span class="title">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"status"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><br><span class="line">  <span class="keyword">void</span> <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> doBtn = <span class="built_in">document</span>.getElementById(<span class="string">'doBtn'</span>)</span><br><span class="line">      , status = <span class="built_in">document</span>.getElementById(<span class="string">'status'</span>);</span><br><span class="line"></span><br><span class="line">    doBtn.onclick = <span class="function"><span class="keyword">function</span><span class="params">(e)</span> </span>&#123;</span><br><span class="line">      e.preventDefault();</span><br><span class="line"></span><br><span class="line">      status.innerText = <span class="string">'doing...please wait...'</span>;  <span class="comment">//开始啦</span></span><br><span class="line">      sleep(<span class="number">10000</span>);  <span class="comment">//模拟一个耗时较长的计算过程，10s</span></span><br><span class="line">      status.innerText = <span class="string">'done'</span>;  <span class="comment">//完成啦</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">sleep</span><span class="params">(ms)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> start = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">new</span> <span class="built_in">Date</span>() - start &lt;= ms) &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>上面代码主要想完成一个功能：按钮被点击时———&gt;显示一个状态告知用户正在干一些事情———&gt;开始干———&gt;事情干完后状态变更为已完成。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2012/08/28/javascript-event-loop/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/event-loop/"> #event-loop </a>
-          
-            <a href="/tags/javascript/"> #javascript </a>
-          
-            <a href="/tags/javascript-timer/"> #javascript timer </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -537,7 +541,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -551,7 +555,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

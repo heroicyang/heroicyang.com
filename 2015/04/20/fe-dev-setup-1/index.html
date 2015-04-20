@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="inherit,javascript," />
+  <meta name="keywords" content="mac," />
 
 
 
@@ -33,7 +33,7 @@
 
 
 
-  <title> 关于JavaScript中的继承（三）：再谈类式继承 // HeroicYang's Blog </title>
+  <title> 前端开发者的 Mac 配置手册（一） // HeroicYang's Blog </title>
 </head>
 
 <body>
@@ -104,7 +104,7 @@
           
           
             
-              关于JavaScript中的继承（三）：再谈类式继承
+              前端开发者的 Mac 配置手册（一）
             
           
         </h1>
@@ -112,7 +112,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2013-06-07
+          发表于 2015-04-20
         </span>
 
         
@@ -121,8 +121,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2013/06/07/javascript-class-inherit-optimized/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2013/06/07/javascript-class-inherit-optimized/"></span>
+            <a href="/2015/04/20/fe-dev-setup-1/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/20/fe-dev-setup-1/"></span>
             </a>
           </span>
           
@@ -136,23 +136,43 @@
       
 
       
-        <p>在<a href="/2013/05/30/learn-javascript-inherit-class/">《关于JavaScript中的继承（一）：类式继承》</a>中已经基本上实现了类式继承，但仍然还存在一些问题，接下来对之前的实现进一步进行完善。  </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Parent = <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name || <span class="string">'heroic'</span>;</span><br><span class="line">&#125;;</span><br><span class="line">Parent.prototype.print = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'name: '</span>, <span class="keyword">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> parent = <span class="keyword">new</span> Parent();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Child = <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> </span>&#123;</span><br><span class="line">  Parent.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">&#125;;</span><br><span class="line">Child.prototype = parent;</span><br><span class="line">Child.prototype.setChildAge = <span class="function"><span class="keyword">function</span> <span class="params">(age)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">parent.setChildAge(<span class="number">10</span>);</span><br><span class="line"><span class="built_in">console</span>.log(parent.age);  <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
-<p>正如代码所见，在为子对象原型添加自己独有方法的时候，父对象也受到了影响，这可不是期望的结果。  </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> child = <span class="keyword">new</span> Child(<span class="string">'child'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(child.name);  <span class="comment">// 'child'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> child.name;</span><br><span class="line"><span class="built_in">console</span>.log(child.name);  <span class="comment">// 'heroic'</span></span><br></pre></td></tr></table></figure>
-<p>同样如代码所示，<code>child</code>对象持有了两个<code>name</code>属性，一个是通过构造函数拷贝的，另一个是原型链上的，当删除掉本身的<code>name</code>属性后，便访问到了原型链上的了。对于这个问题，解决方案很简单直接：  </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ... */</span></span><br><span class="line">Child.prototype = Parent.prototype;  <span class="comment">// 只继承父对象原型链上的属性</span></span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line"><span class="keyword">delete</span> child.name;</span><br><span class="line"><span class="built_in">console</span>.log(child.name);  <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
-<p>但是这种方法也并没有解决最开始的那个问题，即添加或删除子对象原型上的属性时，会一并反映到父对象中。这个时候就需要用到<a href="/2013/06/02/learn-javascript-inherit-proto/">《关于JavaScript中的继承（二）：原型式继承》</a>中用到的临时构造函数了。  </p>
+        <h3 id="前言">前言</h3><blockquote class="blockquote-center">工欲善其事，必先利其器。</blockquote>
+
+<p>目前可供开发人员使用的工具越来越多，合理的使用工具有助于提升开发效率，但种类繁多时选择起来却会让人感觉眼花缭乱。所以我准备在接下来的几篇文章中分享一些我的 Mac 开发环境配置，供大家参考。</p>
 <a id="more"></a>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> inherit = <span class="function"><span class="keyword">function</span> <span class="params">(subClass, superClass)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;&#125;;</span><br><span class="line">  F.prototype = superClass.prototype;</span><br><span class="line">  subClass.prototype = <span class="keyword">new</span> F;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 然后将 `Child.prototype = Parent.prototype` 调整为</span></span><br><span class="line">inherit(Child, Parent);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 增加`Child`自己的方法之后</span></span><br><span class="line">Child.prototype.setChildAge = <span class="function"><span class="keyword">function</span> <span class="params">(age)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">parent.setChildAge(<span class="number">10</span>);  <span class="comment">// TypeError: Object [object Object] has no method 'setChildAge'</span></span><br></pre></td></tr></table></figure>
-<p>不再影响父对象的行为了，而且还可以为<code>inherit</code>方法增加子对象访问父对象行为的特性。  </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> inherit = <span class="function"><span class="keyword">function</span> <span class="params">(subClass, superClass)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;&#125;;</span><br><span class="line">  F.prototype = superClass.prototype;</span><br><span class="line">  subClass.prototype = <span class="keyword">new</span> F;</span><br><span class="line">  subClass.prototype._super = superClass.prototype;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 然后重写了子对象的`print()`方法，但依然还是想重用父对象的</span></span><br><span class="line">Child.prototype.print = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'before print...balabala...'</span>);</span><br><span class="line">  <span class="keyword">this</span>._super.print.call(<span class="keyword">this</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child = <span class="keyword">new</span> Child(<span class="string">'child'</span>);</span><br><span class="line">child.print();  <span class="comment">// 'before print...balabala...'</span></span><br><span class="line">                <span class="comment">// 'name:  child'</span></span><br></pre></td></tr></table></figure>
-<p>最后，如果说这个类式继承模式还有哪点不够完美的话，那就是在子对象继承父对象之后，子对象的构造函数指向被改写了。  </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(child.constructor === Parent);  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>没办法，只有在继承的最后，把<code>constructor</code>修正回来就是。  </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> inherit = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">(subClass, superClass)</span> </span>&#123;</span><br><span class="line">    F.prototype = superClass.prototype;</span><br><span class="line">    subClass.prototype = <span class="keyword">new</span> F;</span><br><span class="line">    subClass.prototype._super = superClass.prototype;</span><br><span class="line">    subClass.prototype.constructor = subClass;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line"><span class="built_in">console</span>.log(child.constructor === Child);  <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(child.constructor === Parent);  <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
-<p>同时，也如<a href="/2013/06/02/learn-javascript-inherit-proto/">《关于JavaScript中的继承（二）：原型式继承》</a>中提到的那样，利用闭包来减少每次调用<code>inherit()</code>都会生成一个临时构造函数的开销。  </p>
-<p>写在最后，类式继承为我们带来了JavaScript中不存在的完整的类的概念，这对于从面向对象语言转过来的程序员来说，可能是很好的方式。但是它也有可能让我们忽略了JavaScript真正的原型式继承。不过这些模式都没有好与坏之分，应该在适合的场景使用合适的方法才是。</p>
+<h3 id="XCode">XCode</h3><p>如果是一台全新的 Mac 电脑，那第一件事情就是去安装 XCode 吧。然后在终端中用如下命令安装 <code>Xcode command line tools</code>，按照指引安装即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ xcode-select --install</span><br></pre></td></tr></table></figure>
+<p><em>如果你不做 Obj-C 开发，可以跳过 XCode 的安装，直接去下载 <code>Xcode command line tools</code> 来安装即可。</em></p>
+<h3 id="Homebrew">Homebrew</h3><p>Homebrew 是 Mac 上最受欢迎的<a href="https://en.wikipedia.org/wiki/Package_manager" target="_blank" rel="external">包管理工具</a>。</p>
+<h4 id="安装">安装</h4><p>在此之前，必须保证 <code>Xcode command line tools</code>。然后在终端中用如下命令按照指引来安装 Homebrew 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ruby <span class="operator">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></span><br></pre></td></tr></table></figure>
+<p>安装完成之后将 Homebrew 的可执行命令添加到环境变量中。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">'export PATH="/usr/local/bin:$PATH"'</span> &gt;&gt; ~/.bash_profile</span><br></pre></td></tr></table></figure></p>
+<h4 id="简单使用">简单使用</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ brew install &lt;package_name&gt;  <span class="comment"># 安装包</span></span><br><span class="line">$ brew update                  <span class="comment"># 更新包目录</span></span><br><span class="line">$ brew outdated                <span class="comment"># 查看需要更新的包</span></span><br><span class="line">$ brew upgrade &lt;package_name&gt;  <span class="comment"># 更新包</span></span><br><span class="line">$ brew list                    <span class="comment"># 查看已安装的包</span></span><br></pre></td></tr></table></figure>
+<h4 id="Cakebrew">Cakebrew</h4><p>如果你不喜欢命令行方式来管理，那么 Cakebrew 是极好的选择。Cakebrew App 提供了可视化的界面来接管一部分 brew 命令，大多数操作都可以直接在界面上点几下来完成。</p>
+<p><a href="https://www.cakebrew.com/" target="_blank" rel="external">下载地址</a></p>
+<h3 id="iTerm2">iTerm2</h3><p>替换掉 OS X 自带的 Terminal，不是因为自带的很差劲，而是一款强劲的终端程序可以有效的提升效率（即便是少敲点字符也行）。</p>
+<p><a href="http://iterm2.com/" target="_blank" rel="external">下载地址</a></p>
+<h4 id="Zsh">Zsh</h4><p><a href="http://zsh.sourceforge.net/" target="_blank" rel="external">Zsh</a> 号称终极 Shell，所以愉快的干掉自带的 Bash 吧（自带的又躺了😂）… Zsh 提供了强大的自动补全功能，能自动补全命令、参数、文件名、进程等。</p>
+<p>而 <a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="external">oh-my-zsh</a> 是基于 Zsh 的功能做了一个扩展，提供了方便的插件管理、主题自定义，以及漂亮的自动完成效果。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh</span><br><span class="line">$ <span class="comment"># 安装完成后将当前的环境变量导入 .zshrc 中</span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export PATH=<span class="variable">$PATH</span>"</span> &gt;&gt; ~/.zshrc</span><br><span class="line">$ <span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure>
+<p>在 <code>~/.zshrc</code> 中按照个人喜好配置主题（<code>ZSH_THEME</code>），以及各种插件(<code>plugins</code>)。<a href="https://github.com/robbyrussell/oh-my-zsh/wiki/themes" target="_blank" rel="external">主题太多，任君筛选</a>。另外，以下是我的插件启用情况。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plugins=<span class="list">(<span class="keyword">git</span> github git-flow git-extras brew osx node npm copydir copyfile cp sublime zsh-syntax-highlighting)</span></span><br></pre></td></tr></table></figure>
+<h3 id="Git">Git</h3><p>我们是前卫的前端工程师，不用 Git 怎么好意思和别人打招呼呢。。。😂</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git --version     <span class="comment"># 如果提示命令不存在，那用 Homebrew 来安装吧</span></span><br><span class="line">$ brew install git</span><br></pre></td></tr></table></figure>
+<p>然后配置一些全局的信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"Your Name"</span></span><br><span class="line">$ git config --global user.email <span class="string">"your_email@youremail.com"</span></span><br></pre></td></tr></table></figure>
+<p>如果使用 SSH 方式来拉取/推送代码，请参考<a href="https://help.github.com/articles/generating-ssh-keys" target="_blank" rel="external">这里</a>。而 HTTPS 方式不想每次都输入你的 Git 用户名和密码的话，请继续按照以下配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global credential.helper osxkeychain</span><br></pre></td></tr></table></figure>
+<h3 id="Node-js">Node.js</h3><p>我们是前卫的前端工程师，没用过 Node.js 肯定也听过 Node.js 吧，否则真的是不好意思和别人打招呼的😂。。。少年，赶紧去<a href="https://nodejs.org/" target="_blank" rel="external">官网</a>下载安装吧~</p>
+<h4 id="NPM">NPM</h4><p>Node 的<a href="https://www.npmjs.com/" target="_blank" rel="external">包管理系统</a>。安装好 Node 之后自带，不过在某些 Node 版本中自带的 NPM 版本很低，你需要执行下面命令来升级。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm up npm -g        <span class="comment"># 用 NPM 升级 NPM，感觉很酷对吧？</span></span><br></pre></td></tr></table></figure>
+<p>另外，推荐安装以下包：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm i gulp -g        <span class="comment"># 前端构建工具</span></span><br><span class="line">$ sudo npm i grunt-cli -g   <span class="comment"># 另一个前端构建工具</span></span><br><span class="line">$ sudo npm i bower -g       <span class="comment"># 前端包管理工具（为毛又一个包管理工具？不要在意这些细节）</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Golang_(optional)">Golang (optional)</h3><p>这一小节算是赠送啦，反正你都看到这里了。。。</p>
+<p>Golang 是谷歌开发的一门现代编程语言，强类型、并发、高性能、语言特性简洁高效… 恩，另外，Node 社区的 <a href="https://github.com/tj" target="_blank" rel="external">TJ</a> 大神目前已转投此阵营…</p>
+<p>安装就不用说了，上<a href="http://golang.org/" target="_blank" rel="external">官网</a>下载即可。如果你没办法越过 GFW，那去<a href="http://www.golangtc.com/download" target="_blank" rel="external">这里</a>下载吧。</p>
+<h4 id="配置">配置</h4><p>我一般会为 Go 配置两个 <code>GOPATH</code>，<code>/usr/local/share/go</code> 用于安装第三方包，<code>~/codes/go</code> 用于放置自己项目代码（工作目录）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">"export GOROOT=/usr/local/go"</span> &gt;&gt; ~/.zshrc</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export GOPATH=/usr/local/share/go:<span class="variable">$HOME</span>/codes/go"</span> &gt;&gt; ~/.zshrc</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export PATH=<span class="variable">$PATH</span>:/usr/local/share/go/bin"</span> &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure>
+<h3 id="参考资料">参考资料</h3><p><a href="https://www.gitbook.com/book/aaaaaashu/mac-dev-setup/details" target="_blank" rel="external">Mac 开发配置手册</a><br><a href="https://github.com/robbyrussell/oh-my-zsh#basic-installation" target="_blank" rel="external">oh-my-zsh Installation</a></p>
 
       
     </div>
@@ -161,9 +181,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/inherit/"> #inherit </a>
-          
-            <a href="/tags/javascript/"> #javascript </a>
+            <a href="/tags/mac/"> #mac </a>
           
         </div>
       
@@ -172,13 +190,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2013/06/20/random-record-in-mongodb/">Mongodb中随机的查询文档记录</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/06/02/learn-javascript-inherit-proto/">关于JavaScript中的继承（二）：原型式继承</a>
+              <a href="/2013/11/24/maintainable-gruntjs/">编写可维护的 Gruntfile.js</a>
             
           </div>
         </div>
@@ -194,8 +210,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2013/06/07/javascript-class-inherit-optimized/"
-               data-title="关于JavaScript中的继承（三）：再谈类式继承" data-url="http://heroicyang.com/2013/06/07/javascript-class-inherit-optimized/">
+          <div class="ds-thread" data-thread-key="2015/04/20/fe-dev-setup-1/"
+               data-title="前端开发者的 Mac 配置手册（一）" data-url="http://heroicyang.com/2015/04/20/fe-dev-setup-1/">
           </div>
         
       </div>
@@ -304,7 +320,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XCode"><span class="nav-number">2.</span> <span class="nav-text">XCode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Homebrew"><span class="nav-number">3.</span> <span class="nav-text">Homebrew</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">3.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单使用"><span class="nav-number">3.2.</span> <span class="nav-text">简单使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cakebrew"><span class="nav-number">3.3.</span> <span class="nav-text">Cakebrew</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iTerm2"><span class="nav-number">4.</span> <span class="nav-text">iTerm2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Zsh"><span class="nav-number">4.1.</span> <span class="nav-text">Zsh</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git"><span class="nav-number">5.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-js"><span class="nav-number">6.</span> <span class="nav-text">Node.js</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NPM"><span class="nav-number">6.1.</span> <span class="nav-text">NPM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Golang_(optional)"><span class="nav-number">7.</span> <span class="nav-text">Golang (optional)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">7.1.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

@@ -106,6 +106,89 @@
           
           
             
+              <a class="post-title-link" href="/2012/08/28/javascript-event-loop/">
+                JavaScript Event Loop 浅析
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2012-08-28
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2012/08/28/javascript-event-loop/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2012/08/28/javascript-event-loop/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>最近在学习<code>Nodejs</code>的过程中深入的了解了<code>异步编程</code>这个概念，为了更好的使用<code>Nodejs</code>，这些概念不可不知。在以前作为一个<code>JavaScript</code>用户的时候，完全是不知道它是怎么运行的，对好些概念也是“知其然不知其所以然”。  </p>
+<p>对于客户端的<code>JavaScript</code>和<code>Nodejs</code>来说其实差距不是很大，这回就从客户端方面来说说<code>Event Loop</code>这个概念吧，算是<code>异步编程</code>的一个切入点吧。其实<code>jQuery</code>的作者John Resig在几年前就写了一篇好文章<a href="http://ejohn.org/blog/how-javascript-timers-work/">How JavaScript Timers Work</a>，来讲述<code>timer</code>和<code>事件</code>在浏览器中是怎样工作的，我也是通过这篇文章才“知其所以然”。  </p>
+<h3 id="问题场景">问题场景</h3><p>先来看看一段代码：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">id</span>=<span class="value">"doBtn"</span>&gt;</span>do something<span class="tag">&lt;/<span class="title">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"status"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><br><span class="line">  <span class="keyword">void</span> <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> doBtn = <span class="built_in">document</span>.getElementById(<span class="string">'doBtn'</span>)</span><br><span class="line">      , status = <span class="built_in">document</span>.getElementById(<span class="string">'status'</span>);</span><br><span class="line"></span><br><span class="line">    doBtn.onclick = <span class="function"><span class="keyword">function</span><span class="params">(e)</span> </span>&#123;</span><br><span class="line">      e.preventDefault();</span><br><span class="line"></span><br><span class="line">      status.innerText = <span class="string">'doing...please wait...'</span>;  <span class="comment">//开始啦</span></span><br><span class="line">      sleep(<span class="number">10000</span>);  <span class="comment">//模拟一个耗时较长的计算过程，10s</span></span><br><span class="line">      status.innerText = <span class="string">'done'</span>;  <span class="comment">//完成啦</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">sleep</span><span class="params">(ms)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> start = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">new</span> <span class="built_in">Date</span>() - start &lt;= ms) &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>上面代码主要想完成一个功能：按钮被点击时———&gt;显示一个状态告知用户正在干一些事情———&gt;开始干———&gt;事情干完后状态变更为已完成。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2012/08/28/javascript-event-loop/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/event-loop/"> #event-loop </a>
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+            <a href="/tags/javascript-timer/"> #javascript timer </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2012/08/26/blogging-like-a-hacker/">
                 像黑客一样写博客
               </a>
@@ -450,7 +533,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -464,7 +547,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

@@ -106,6 +106,88 @@
           
           
             
+              <a class="post-title-link" href="/2013/06/24/bind-function-in-javascript-web-application-book/">
+                关于《JavaScript Web Application》中的bind方法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2013-06-24
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2013/06/24/bind-function-in-javascript-web-application-book/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2013/06/24/bind-function-in-javascript-web-application-book/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>去年底就草草了了的翻过<a href="http://book.douban.com/subject/10733304/" target="_blank">《JavaScript Web Application》</a>这本书，当时就遇到好几个地方没怎么看明白，当时也没有去深究，就只是简单的过一遍这本书。由于此前JavaScript方面的知识匮乏，所以把这本书就缓在阅读队列里了，最近才轮到。其间读了好几本基础和进阶的书，所以这次读这本书，很多之前不明白的地方就豁然明了了。不过好记性不如烂笔头，没准下次忘记了呢。  </p>
+<p>记得此前书中对ES5 <code>bind()</code>方法的实现就是一个让我感到迷糊的地方（中文版P16）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="built_in">Function</span>.prototype.bind) &#123;</span><br><span class="line">  <span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span> <span class="params">(context)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> slice = [].slice</span><br><span class="line">      , args = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>)</span><br><span class="line">      , self = <span class="keyword">this</span></span><br><span class="line">      , nop = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;&#125;  <span class="comment">// ① `nop`（函数）的作用？</span></span><br><span class="line">      , bound = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="comment">// ② 为什么要做`instanceof`判断？</span></span><br><span class="line">          <span class="keyword">return</span> self.apply(<span class="keyword">this</span> <span class="keyword">instanceof</span> nop ? <span class="keyword">this</span> : (context || &#123;&#125;),</span><br><span class="line">                              args.concat(slice.call(<span class="built_in">arguments</span>)));</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ③ 为什么要设置它俩的原型？</span></span><br><span class="line">    nop.prototype = self.prototype;</span><br><span class="line">    bound.prototype = <span class="keyword">new</span> nop();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bound;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>bind()</code>：用来动态改变函数调用时其内部<code>this</code>对象的引用，使目标函数基于正确的上下文进行调用。jQuery中实现为<code>$.proxy()</code>方法，ES5则自带了。</p>
+</blockquote>
+<p>上面代码中① ② ③都是我此前不明白的地方，不过在这次阅读的过程中，就豁然开朗了。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/06/24/bind-function-in-javascript-web-application-book/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/"> #javascript </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2013/06/20/random-record-in-mongodb/">
                 Mongodb中随机的查询文档记录
               </a>
@@ -425,93 +507,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2013/05/22/hexo-theme-modernist/">
-                折腾了个新主题
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2013-05-22
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2013/05/22/hexo-theme-modernist/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2013/05/22/hexo-theme-modernist/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-        <div class="post-gallery">
-          
-            <a class="post-gallery-img fancybox" href="http://img.heroicyang.com/hexo-theme-modernist-index.png" rel="gallery_ci8gzu1sn000x7vtf4gfvv82y">
-              <img src="http://img.heroicyang.com/hexo-theme-modernist-index.png" />
-            </a>
-          
-        </div>
-      
-
-      
-        
-          <p>前几天偶然发现了一个Github Page主题：<a href="http://orderedlist.github.io/modernist/" target="_blank" rel="external">Modernist</a>，觉着很舒服。作者将其开源在Github上的，所以我就fork下来自己折腾了个<a href="https://github.com/tommy351/hexo" target="_blank" rel="external">Hexo</a>的主题。  </p>
-<p>根据<a href="https://github.com/tommy351/hexo-theme-light" target="_blank" rel="external">light</a>主题的结构修改而来，但是去掉了侧边栏，改成一栏，所以随之也就没有了light主题的那些widget了。不过我增加了国内的<a href="http://duoshuo.com/" target="_blank" rel="external">多说评论框</a>的配置，以及更好的响应式支持。  </p>
-<p>主题已经放到<a href="https://github.com/heroicyang/hexo-theme-modernist" target="_blank" rel="external">Github</a>上了，也已完全适用于最新版的Hexo。<span class="text-lt">为了更好的使用这个主题，建议clone我fork的<a href="https://github.com/heroicyang/hexo" target="_blank" rel="external">hexo</a>项目到本地，使用<code>/path/to/hexo/bin/hexo</code>来代替之前安装的全局<code>hexo</code>命令，方法见下面。我主要修改了代码块高亮（highlight）生成，以及修复了始终会生成Read more链接的BUG，不过我会尽快发起pull request到hexo的。</span>  </p>
-<p>另外，如果需要使用多说评论框，可以使用我的自定义多说评论框样式，主要保持了和Modernist theme的样式统一。请猛戳<a href="https://gist.github.com/heroicyang/5644407" target="_blank" rel="external">这里</a>。</p>
-
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/hexo/"> #hexo </a>
-          
-            <a href="/tags/modernist/"> #modernist </a>
-          
-            <a href="/tags/theme/"> #theme </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -547,7 +542,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -561,7 +556,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

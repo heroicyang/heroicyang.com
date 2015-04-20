@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://heroicyang.com/2015/04/20/fe-dev-setup-1/</loc>
+    <lastmod>2015-04-20T07:57:22.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://heroicyang.com/tags/index.html</loc>
     <lastmod>2015-03-23T15:58:38.000Z</lastmod>
   </url>
@@ -17,7 +22,7 @@
   </url>
   
   <url>
-    <loc>http://heroicyang.com/2012/10/14/javascript-timer-and-event-in-depth/</loc>
+    <loc>http://heroicyang.com/2013/07/14/javascript-variable-scope/</loc>
     <lastmod>2014-04-30T13:01:25.000Z</lastmod>
   </url>
   
@@ -57,7 +62,7 @@
   </url>
   
   <url>
-    <loc>http://heroicyang.com/2013/07/14/javascript-variable-scope/</loc>
+    <loc>http://heroicyang.com/2012/10/14/javascript-timer-and-event-in-depth/</loc>
     <lastmod>2014-04-30T13:01:25.000Z</lastmod>
   </url>
   
