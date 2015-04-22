@@ -76,7 +76,7 @@
     <link href="http://heroicyang.com/2015/04/20/fe-dev-setup-1/"/>
     <id>http://heroicyang.com/2015/04/20/fe-dev-setup-1/</id>
     <published>2015-04-20T06:12:33.000Z</published>
-    <updated>2015-04-20T09:40:36.000Z</updated>
+    <updated>2015-04-22T06:20:02.000Z</updated>
     <content type="html"><![CDATA[<h3 id="前言">前言</h3><blockquote class="blockquote-center">工欲善其事，必先利其器。</blockquote>
 
 <p>目前可供开发人员使用的工具越来越多，合理的使用工具有助于提升开发效率，但种类繁多时选择起来却会让人感觉眼花缭乱。所以我准备在接下来的几篇文章中分享一些我的 Mac 开发环境配置，供大家参考。</p>
@@ -112,7 +112,7 @@
 <p>Golang 是谷歌开发的一门现代编程语言，强类型、并发、高性能、语言特性简洁高效… 恩，另外，Node 社区的 <a href="https://github.com/tj" target="_blank" rel="external">TJ</a> 大神目前已转投此阵营…</p>
 <p>安装就不用说了，上<a href="http://golang.org/" target="_blank" rel="external">官网</a>下载即可。如果你没办法越过 GFW，那去<a href="http://www.golangtc.com/download" target="_blank" rel="external">这里</a>下载吧。</p>
 <h4 id="配置">配置</h4><p>我一般会为 Go 配置两个 <code>GOPATH</code>，<code>/usr/local/share/go</code> 用于安装第三方包，<code>~/codes/go</code> 用于放置自己项目代码（工作目录）。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">"export GOROOT=/usr/local/go"</span> &gt;&gt; ~/.zshrc</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export GOPATH=/usr/local/share/go:<span class="variable">$HOME</span>/codes/go"</span> &gt;&gt; ~/.zshrc</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export PATH=<span class="variable">$PATH</span>:/usr/local/share/go/bin"</span> &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">"export GOROOT=/usr/local/go"</span> &gt;&gt; ~/.zshrc</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export GOPATH=/usr/local/share/go:<span class="variable">$HOME</span>/codes/go"</span> &gt;&gt; ~/.zshrc</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"export PATH=<span class="variable">$PATH</span>:/usr/local/share/go/bin"</span> &gt;&gt; ~/.zshrc</span><br><span class="line">$ <span class="built_in">source</span> ~/.zshrc</span><br><span class="line">$ mkdir <span class="variable">$HOME</span>/codes/go    <span class="comment"># 创建自己的工作目录</span></span><br></pre></td></tr></table></figure>
 <h3 id="参考资料">参考资料</h3><ul>
 <li><a href="https://www.gitbook.com/book/aaaaaashu/mac-dev-setup/details" target="_blank" rel="external">Mac 开发配置手册</a></li>
 <li><a href="https://github.com/robbyrussell/oh-my-zsh#basic-installation" target="_blank" rel="external">oh-my-zsh Installation</a></li>
